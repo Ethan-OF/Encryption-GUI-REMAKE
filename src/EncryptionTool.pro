@@ -1,7 +1,10 @@
 QT += quick
+CONFIG += static
 
 SOURCES += \
-        main.cpp
+        main.cpp \
+        threadmanager.cpp \
+        qaesencryption.cpp
 
 resources.files = main.qml 
 resources.prefix = /$${TARGET}
@@ -17,3 +20,7 @@ QML_DESIGNER_IMPORT_PATH =
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+HEADERS += \
+    threadmanager.h \
+    qaesencryption.h

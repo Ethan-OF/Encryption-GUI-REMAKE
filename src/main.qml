@@ -8,16 +8,6 @@ Window {
     color: "#1e1d24"
     title: qsTr("Encryption Tool")
 
-    TextArea {
-        id: inputArea
-        x: 84
-        y: 0
-        width: 206
-        height: 120
-        readOnly: runBTN.checked
-        placeholderText: qsTr("INPUT / OUTPUT")
-    }
-
     TextField {
         id: keyField
         x: 0
@@ -27,7 +17,6 @@ Window {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         readOnly: runBTN.checked
-        inputMask: ""
         maximumLength: 5
         placeholderText: qsTr("Key (DEFAULT)")
     }
@@ -39,7 +28,31 @@ Window {
         width: 57
         height: 23
         text: modeSWT.checked? "ENC" : "DCR"
-        checkable: true
+        checkable: runBTN.checked
+
+        Connections {
+            target: runBTN
+            function onClicked(s)
+            {
+                core.run(inputArea.text, keyField.text, modeSWT.checked);
+            }
+        }
+
+        Connections {
+            target: runBTN
+            function onClicked()
+            {
+                runBTN.enabled = false;
+            }
+        }
+
+        Connections {
+            target: core
+            function onUpdate()
+            {
+                runBTN.enabled = true
+            }
+        }
     }
 
     Text {
@@ -63,4 +76,34 @@ Window {
         display: AbstractButton.IconOnly
         enabled: !runBTN.checked
     }
+
+    ScrollView {
+        id: scrollArea
+        x: 84
+        y: 0
+        width: 206
+        height: 121
+        ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+
+        TextArea {
+            id: inputArea
+            x: 0
+            y: 0
+            width: 206
+            height: 120
+            wrapMode: Text.Wrap
+            textFormat: Text.PlainText
+            readOnly: runBTN.checked
+            placeholderText: qsTr("INPUT / OUTPUT")
+
+            Connections {
+                target: core
+                function onUpdate(s)
+                {
+                    inputArea.text = s
+                }
+            }
+        }
+    }
+
 }
